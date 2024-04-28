@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.footballstore.mapper.ProductMapper">
+<!--resultMap封装查询的结果-->
+    <resultMap id="productResult" type="com.store.footballstore.entity.Product">
+        <association property="type" column="typeId"
+                     select="com.store.footballstore.mapper.SmallTypeMapper.findById"></association>
+    </resultMap>
+<!--查询首页轮播图-->
+    <select id="findSwiper" resultMap="productResult">
+        select * from table_product where isSwiper=true order by swiperSort
+    </select>
+<!--查询首页热卖商品-->
+<!--limit0,8表示从查询出来的数据从第一个取，取8个-->
+    <select id="findHot" resultMap="productResult">
+        select * from table_product where isHot=true order by hotDateTime desc LIMIT 0,8
+    </select>
+<!--根据关键字模糊查询-->
+    <select id="list" parameterType="Map" resultMap="productResult">
+        select * from table_product
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+        <if test="start!=null and pageSize!=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+<!--查询商品的总记录数-->
+<!--parameterType表示接口中参数类型-->
+    <select id="getTotal" parameterType="Map" resultType="Long">
+        select count(*) from table_product
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+<!--添加商品-->
+    <insert id="add" parameterType="com.store.footballstore.entity.Product">
+        insert into table_product values(null,#{name},#{price},#{stock},#{proPic},#{hot},#{swiper},#{swiperPic},#{swiperSort},#{type.id},null,#{description});
+    </insert>
+<!--修改商品-->
+    <update id="update" parameterType="com.store.footballstore.entity.Product">
+        update table_product
+        <set>
+            <if test="name!=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+            </if>
+            <if test="stock!=null">
+                stock=#{stock},
+            </if>
+            <if test="type!=null and type.id!=null">
+                typeId=#{type.id},
+            </if>
+            <if test="description!=null and description!=''">
+                description=#{description},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

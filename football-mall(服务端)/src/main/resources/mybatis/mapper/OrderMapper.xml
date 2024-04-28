@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.footballstore.mapper.OrderMapper">
+
+    <resultMap id="orderResult" type="com.store.footballstore.entity.Order">
+        <association property="user" column="userId"
+                     select="com.store.footballstore.mapper.UserMapper.findByOpenId"></association>
+    </resultMap>
+<!--查询订单-->
+    <select id="list" parameterType="Map" resultMap="orderResult">
+        select * from table_order
+        <where>
+            <if test="orderNo!=null and orderNo!=''">
+                and orderNo like concat('%',#{orderNo},'%')
+            </if>
+        </where>
+        order by createDate desc
+        <if test="start!=null and pageSize!=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+<!--查询订单总记录数-->
+    <select id="getTotal" parameterType="Map" resultType="Long">
+        select count(*) from table_order
+        <where>
+            <if test="orderNo!=null and orderNo!=''">
+                and orderNo like concat('%',#{orderNo},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

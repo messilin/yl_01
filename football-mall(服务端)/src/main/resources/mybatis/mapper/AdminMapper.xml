@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.footballstore.mapper.AdminMapper">
+<!--根据管理员名字修改管理员密码-->
+    <select id="update" parameterType="com.store.footballstore.entity.Admin">
+        update table_admin set password=#{newPassword} where userName=#{userName}
+    </select>
+</mapper>

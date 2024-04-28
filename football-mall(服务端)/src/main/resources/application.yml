@@ -1,0 +1,44 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_football_mall?serverTimezone=Asia/Shanghai
+    username: root
+    password: 5201314
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    map-underscore-to-camel-case: false
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+weixin:
+  jscode2sessionUrl: https://api.weixin.qq.com/sns/jscode2session
+  appid: wxf17fc03e795bb945
+  secret: b98aaefcba89cc4ed2239058636d397b
+
+#weixinpayconfig:
+#    appid: wxf17fc03e795bb945
+#    mch_id:
+#    key: jrBXpy1VPNY0FCFI42EBShLom7KMaRBa
+#    url: https://api.mch.weixin.qq.com/pay/unifiedorder
+#    notify_url: https://2c23-222-184-165-54.ngrok.io/weixinpay/notifyUrl
+
+
+productImagesFilePath:
+  D://pictures-source/productImgs/
+
+swiperImagesFilePath:
+  D://pictures-source/productImgs/
+
+productSwiperImagesFilePath:
+  D://pictures-source/productSwiperImgs/

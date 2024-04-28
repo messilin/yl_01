@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.footballstore.mapper.SmallTypeMapper">
+
+    <resultMap id="smallTypeResult" type="com.store.footballstore.entity.SmallType">
+        <association property="bigType" column="bigTypeId"
+                     select="com.store.footballstore.mapper.BigTypeMapper.findById"></association>
+    </resultMap>
+<!--根据Id查询商品小类-->
+    <select id="findById" parameterType="Integer" resultMap="smallTypeResult">
+        select *
+        from table_smalltype where id=#{id};
+    </select>
+<!---->
+    <select id="list" parameterType="Map" resultMap="smallTypeResult">
+        select * from table_smalltype
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+        <if test="start!=null and pageSize!=null">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getTotal" parameterType="Map" resultType="Long">
+        select count(*) from table_smalltype
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="com.store.footballstore.entity.SmallType">
+        insert into table_smalltype values (null,#{name},#{remark},#{bigType.id})
+    </insert>
+
+    <update id="update" parameterType="com.store.footballstore.entity.SmallType">
+        update table_smalltype
+<set>
+    <if test="name!=null and name!=''">
+        name=#{name},
+    </if>
+    <if test="remark!=null and remark!=''">
+        remark=#{remark},
+    </if>
+    <if test="bigType.id!=null">
+bigTypeId=#{bigType.id},
+    </if>
+</set>
+where id=#{id}
+    </update>
+</mapper>
